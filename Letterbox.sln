@@ -1,0 +1,25 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.29306.81
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Letterbox", "Letterbox\Letterbox.csproj", "{E84EC82B-2603-4875-B7E3-5AEE1FDF9829}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{E84EC82B-2603-4875-B7E3-5AEE1FDF9829}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E84EC82B-2603-4875-B7E3-5AEE1FDF9829}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E84EC82B-2603-4875-B7E3-5AEE1FDF9829}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E84EC82B-2603-4875-B7E3-5AEE1FDF9829}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {F2223232-5940-4623-B254-355CA8552870}
+	EndGlobalSection
+EndGlobal
