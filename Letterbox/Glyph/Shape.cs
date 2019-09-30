@@ -5,6 +5,6 @@ namespace Letterbox
 {
     public class Shape
     {
-        List<Path> Paths;
+        public List<Part> Parts { get; set; }
     }
 }

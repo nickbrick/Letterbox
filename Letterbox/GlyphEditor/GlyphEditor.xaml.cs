@@ -20,9 +20,27 @@ namespace Letterbox
     /// </summary>
     public partial class GlyphEditor : Page
     {
+        public Glyph Workpiece { get; set; }
+        public Glyph Left;
+        public Glyph Right;
+        public HashSet<Guideline> Guidelines;
         public GlyphEditor()
         {
             InitializeComponent();
+            Open(new Glyph("a"));
+            Render();
+        }
+        public void Open(Glyph glyph)
+        {
+            //Workpiece = glyph;
+            Workpiece = glyph;
+            //Guidelines = glyph.GetParameters().Select(param => new Guideline(param)).ToHashSet();
+        }
+        public void Render()
+        {
+            var lbl = new Label();
+            lbl.Content = Workpiece.Character;
+            
         }
     }
 }

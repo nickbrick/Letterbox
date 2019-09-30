@@ -61,8 +61,13 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="GlyphEditor\ControlPoint.cs" />
+    <Compile Include="GlyphEditor\Guideline.cs" />
+    <Compile Include="GlyphEditor\Influence.cs" />
+    <Compile Include="Part\Part.cs" />
+    <Compile Include="Typeface\Parameter.cs" />
     <Compile Include="Typeface\Typeface.cs" />
-    <Page Include="GlyphEditor.xaml">
+    <Page Include="GlyphEditor\GlyphEditor.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -74,7 +79,7 @@
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="GlyphEditor.xaml.cs">
+    <Compile Include="GlyphEditor\GlyphEditor.xaml.cs">
       <DependentUpon>GlyphEditor.xaml</DependentUpon>
     </Compile>
     <Compile Include="Glyph\Glyph.cs" />
@@ -111,5 +116,6 @@
   <ItemGroup>
     <None Include="App.config" />
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

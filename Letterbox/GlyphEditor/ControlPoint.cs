@@ -6,10 +6,8 @@ using System.Threading.Tasks;
 
 namespace Letterbox
 {
-    class Typeface
+    public class ControlPoint
     {
-        SortedSet<Glyph> Glyphs;
-        HashSet<Part> Parts;
-        HashSet<Parameter> Parameters;
+        public HashSet<Influence> Influences;
     }
 }

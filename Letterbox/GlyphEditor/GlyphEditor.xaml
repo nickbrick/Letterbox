@@ -1,0 +1,19 @@
+﻿<Page x:Class="Letterbox.GlyphEditor"
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+      xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+      xmlns:local="clr-namespace:Letterbox"
+      mc:Ignorable="d" 
+      d:DesignHeight="464.019" d:DesignWidth="792.991"
+      Title="GlyphEditor">
+
+    <Grid Background="#FF212020">
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="1.2*"/>
+            <ColumnDefinition Width="2*"/>
+            <ColumnDefinition Width="1.2*"/>
+        </Grid.ColumnDefinitions>
+        <Label Content="{Binding Workpiece.Character, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type local:GlyphEditor}}}" Margin="0" FontSize="120" FontStyle="Italic" Grid.Column="1" MinWidth="50" MinHeight="100" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" Foreground="White"/>
+    </Grid>
+</Page>
