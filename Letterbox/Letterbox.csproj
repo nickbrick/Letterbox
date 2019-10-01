@@ -64,7 +64,13 @@
     <Compile Include="GlyphEditor\ControlPoint.cs" />
     <Compile Include="GlyphEditor\Guideline.cs" />
     <Compile Include="GlyphEditor\Influence.cs" />
+    <Compile Include="GlyphEditor\LetterStrip\LetterButton.cs" />
+    <Compile Include="GlyphEditor\LetterStrip\LetterStrip.cs" />
+    <Compile Include="GlyphEditor\LetterStrip\LetterStripEventArgs.cs" />
     <Compile Include="Part\Part.cs" />
+    <Compile Include="sandbox.xaml.cs">
+      <DependentUpon>sandbox.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Typeface\Parameter.cs" />
     <Compile Include="Typeface\Typeface.cs" />
     <Page Include="GlyphEditor\GlyphEditor.xaml">
@@ -88,6 +94,10 @@
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
+    <Page Include="sandbox.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Properties\AssemblyInfo.cs">

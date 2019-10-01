@@ -1,0 +1,46 @@
+﻿<Window x:Class="Letterbox.sandbox"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:Letterbox"
+        mc:Ignorable="d"
+        Title="sandbox" Height="450" Width="800">
+    <Grid>
+
+        <TextBlock Grid.Row="0" Text="this is not in the scrollviewer" Name="tb"/>
+        <ScrollViewer Name="sv" 
+                  HorizontalScrollBarVisibility="Auto" Margin="0" HorizontalAlignment="Right">
+            <StackPanel Name="sp" 
+                    Background="Transparent" PreviewMouseDown="Sp_PreviewMouseDown" PreviewMouseMove="sp_PreviewMouseMove">
+                <Button Content="a" Width="30" Height="30" Margin="0,-5,0,0" IsHitTestVisible="False"/>
+                <Button Content="b" Width="30" Height="30" Margin="0,-5,0,0" Click="Button_Click"/>
+                <Button Content="c" Width="30" Height="30" Margin="0,-5,0,0"/>
+                <Button Content="d" Width="30" Height="30" Margin="0,-5,0,0"/>
+                <Button Content="e" Width="30" Height="30" Margin="0,-5,0,0"/>
+                <Button Content="f" Width="30" Height="30" Margin="0,-5,0,0"/>
+                <Button Content="g" Width="30" Height="30" Margin="0,-5,0,0"/>
+                <Button Content="h" Width="30" Height="30" Margin="0,-5,0,0"/>
+                <Button Content="i" Width="30" Height="30" Margin="0,-5,0,0"/>
+                <Button Content="j" Width="30" Height="30" Margin="0,-5,0,0"/>
+                <Button Content="k" Width="30" Height="30" Margin="0,-5,0,0"/>
+                <Button Content="l" Width="30" Height="30" Margin="0,-5,0,0"/>
+                <Button Content="m" Width="30" Height="30" Margin="0,-5,0,0"/>
+                <Button Content="a" Width="30" Height="30" Margin="0,-5,0,0" IsHitTestVisible="False"/>
+                <Button Content="b" Width="30" Height="30" Margin="0,-5,0,0"/>
+                <Button Content="c" Width="30" Height="30" Margin="0,-5,0,0"/>
+                <Button Content="d" Width="30" Height="30" Margin="0,-5,0,0"/>
+                <Button Content="e" Width="30" Height="30" Margin="0,-5,0,0"/>
+                <Button Content="f" Width="30" Height="30" Margin="0,-5,0,0"/>
+                <Button Content="g" Width="30" Height="30" Margin="0,-5,0,0"/>
+                <Button Content="h" Width="30" Height="30" Margin="0,-5,0,0"/>
+                <Button Content="i" Width="30" Height="30" Margin="0,-5,0,0"/>
+                <Button Content="j" Width="30" Height="30" Margin="0,-5,0,0"/>
+                <Button Content="k" Width="30" Height="30" Margin="0,-5,0,0"/>
+                <Button Content="l" Width="30" Height="30" Margin="0,-5,0,0"/>
+                <Button Content="m" Width="30" Height="30" Margin="0,-5,0,0"/>
+            </StackPanel>
+        </ScrollViewer>
+        <local:LetterStrip HorizontalAlignment="Left" FlowDirection="RightToLeft"></local:LetterStrip>
+    </Grid>
+</Window>

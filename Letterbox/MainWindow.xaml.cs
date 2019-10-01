@@ -24,7 +24,10 @@ namespace Letterbox
         public MainWindow()
         {
             InitializeComponent();
-
+            var sandbox = new sandbox();
+            sandbox.Show();
+            sandbox.Activate();
+            sandbox.Topmost = true;
         }
     }
 }
