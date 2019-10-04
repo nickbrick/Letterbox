@@ -24,7 +24,7 @@ namespace Letterbox
         public MainWindow()
         {
             InitializeComponent();
-            var sandbox = new sandbox();
+            var sandbox = new Sandbox();
             sandbox.Show();
             sandbox.Activate();
             sandbox.Topmost = true;

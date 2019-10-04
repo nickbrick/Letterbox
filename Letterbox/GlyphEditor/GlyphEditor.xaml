@@ -9,11 +9,20 @@
       Title="GlyphEditor">
 
     <Grid Background="#FF212020">
+        <Grid.RowDefinitions>
+            <RowDefinition/>
+            <RowDefinition Height="50"/>
+        </Grid.RowDefinitions>
         <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="50"/>
             <ColumnDefinition Width="1.2*"/>
             <ColumnDefinition Width="2*"/>
             <ColumnDefinition Width="1.2*"/>
+            <ColumnDefinition Width="50"/>
         </Grid.ColumnDefinitions>
-        <Label Content="{Binding Workpiece.Character, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type local:GlyphEditor}}}" Margin="0" FontSize="120" FontStyle="Italic" Grid.Column="1" MinWidth="50" MinHeight="100" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" Foreground="White"/>
+        <Label Content="{Binding Workpiece.Character, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type local:GlyphEditor}}}" Margin="0" FontSize="120" FontStyle="Italic" Grid.Column="2" MinWidth="50" MinHeight="100" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" Foreground="White"/>
+        <local:LetterStrip FlowDirection="RightToLeft" Grid.RowSpan="2" VerticalAlignment="Center"></local:LetterStrip>
+        <local:LetterStrip FlowDirection="LeftToRight" Grid.RowSpan="2" Grid.Column="4" VerticalAlignment="Center"></local:LetterStrip>
+        <local:LetterStrip FlowDirection="LeftToRight" Grid.Column="1" Orientation="Horizontal" Grid.Row="1" Grid.ColumnSpan="3" HorizontalAlignment="Center"/>
     </Grid>
 </Page>

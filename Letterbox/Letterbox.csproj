@@ -68,8 +68,8 @@
     <Compile Include="GlyphEditor\LetterStrip\LetterStrip.cs" />
     <Compile Include="GlyphEditor\LetterStrip\LetterStripEventArgs.cs" />
     <Compile Include="Part\Part.cs" />
-    <Compile Include="sandbox.xaml.cs">
-      <DependentUpon>sandbox.xaml</DependentUpon>
+    <Compile Include="Sandbox.xaml.cs">
+      <DependentUpon>Sandbox.xaml</DependentUpon>
     </Compile>
     <Compile Include="Typeface\Parameter.cs" />
     <Compile Include="Typeface\Typeface.cs" />
@@ -94,7 +94,7 @@
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
-    <Page Include="sandbox.xaml">
+    <Page Include="Sandbox.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

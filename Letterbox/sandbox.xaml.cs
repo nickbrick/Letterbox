@@ -17,11 +17,9 @@ namespace Letterbox
     /// <summary>
     /// Interaction logic for sandbox.xaml
     /// </summary>
-    public partial class sandbox : Window
+    public partial class Sandbox : Window
     {
-
-
-        public sandbox()
+        public Sandbox()
         {
             InitializeComponent();
         }
