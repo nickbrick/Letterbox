@@ -1,14 +1,14 @@
 ﻿namespace Letterbox
 {
-    public enum Orientation
-    {
-        Horizontal,
-        Vertical,
-        None
-    }
+    //public enum Orientation
+    //{
+    //    Horizontal,
+    //    Vertical,
+    //    None
+    //}
     public class Parameter
     {
-        public Orientation Orientation;
+        public System.Windows.Controls.Orientation Orientation;
 
     }
 }

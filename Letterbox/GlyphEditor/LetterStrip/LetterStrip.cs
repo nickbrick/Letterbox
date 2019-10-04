@@ -11,14 +11,43 @@ namespace Letterbox
 {
     class LetterStrip : ScrollViewer
     {
+        public Orientation Orientation {
+            get { return (Orientation)GetValue(OrientationProperty); }
+            set { SetValue(OrientationProperty, value); }
+        }
+
+        // Using a DependencyProperty as the backing store for Orientation.  This enables animation, styling, binding, etc...
+        public static readonly DependencyProperty OrientationProperty =
+            DependencyProperty.RegisterAttached("Orientation", 
+                typeof(Orientation), 
+                typeof(LetterStrip), 
+                new PropertyMetadata(Orientation.Vertical, Orientation_Changed));
+
+        private static void Orientation_Changed(DependencyObject d, DependencyPropertyChangedEventArgs e)
+        {
+            var letterStrip = (LetterStrip)d;
+            var newOrientation = (Orientation)(e.NewValue);
+            letterStrip.stackPanel.Orientation = newOrientation;
+            letterStrip.Width = Double.NaN;
+            letterStrip.Height = Double.NaN;
+            if (newOrientation == Orientation.Horizontal)
+            {
+                letterStrip.FlowDirection = FlowDirection.LeftToRight;
+            }
+        }
+
         private bool fireButtonClickedEvent = true;
         private Point oldMousePosition;
         private StackPanel stackPanel;
+        
 
-        public event EventHandler<LetterStripEventArgs> SelectionChanged;
+        //public event EventHandler<LetterStripEventArgs> SelectionChanged;
         public LetterStrip()
         {
-            this.stackPanel = new StackPanel();
+            stackPanel = new StackPanel();
+            stackPanel.Orientation = this.Orientation;
+            HorizontalScrollBarVisibility = ScrollBarVisibility.Auto;
+            VerticalScrollBarVisibility = ScrollBarVisibility.Auto;
             foreach (char c in "abcdefghijklmABCDEFGHIJKLM")
             {
                 var button = new LetterButton(c.ToString());
