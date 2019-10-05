@@ -62,6 +62,8 @@
       <SubType>Designer</SubType>
     </ApplicationDefinition>
     <Compile Include="GlyphEditor\ControlPoint.cs" />
+    <Compile Include="GlyphEditor\CurveEditor\CurveEditor.cs" />
+    <Compile Include="GlyphEditor\CurveEditor\Handle.cs" />
     <Compile Include="GlyphEditor\Guideline.cs" />
     <Compile Include="GlyphEditor\Influence.cs" />
     <Compile Include="GlyphEditor\LetterStrip\LetterButton.cs" />
@@ -126,8 +128,6 @@
   <ItemGroup>
     <None Include="App.config" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="GlyphEditor\CurveEditor\" />
-  </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
