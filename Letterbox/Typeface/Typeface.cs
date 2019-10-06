@@ -6,10 +6,17 @@ using System.Threading.Tasks;
 
 namespace Letterbox
 {
-    class Typeface
+    public class Typeface
     {
         SortedSet<Glyph> Glyphs;
-        HashSet<Part> Parts;
+        //HashSet<Part> Parts;
         HashSet<Parameter> Parameters;
+
+        public Typeface()
+        {
+            Glyphs = new SortedSet<Glyph> { new Glyph("a") };
+            Parameters = new HashSet<Parameter> { new Parameter() };
+        }
     }
+
 }

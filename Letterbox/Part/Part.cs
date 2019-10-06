@@ -23,14 +23,26 @@ namespace Letterbox
             Path.Stroke = System.Windows.Media.Brushes.Black;
 
             ControlPoints = new List<ControlPoint>();
-            ControlPoints.Add(new ControlPoint(-1, 0));
-            ControlPoints.Add(new ControlPoint(-1, 2));
-            ControlPoints.Add(new ControlPoint(1, 2));
-            ControlPoints.Add(new ControlPoint(1, 0));
-
+            ControlPoints.Add(new ControlPoint(new Point(-1, 0)));
+            ControlPoints.Add(new ControlPoint(new Point(-1, 2)));
+            ControlPoints.Add(new ControlPoint(new Point(1, 2)));
+            ControlPoints.Add(new ControlPoint(new Point(1, 0)));
+            ControlPoints.Add(new ControlPoint(new Point(1.1, 0.1)));
         }
 
-        
+        //public void AddBezierControlPoint(Point position)
+        //{
+        //    ControlPoints.Add(new ControlPoint(Point.Add(position, new Vector(-0.1, 0))));
+        //    ControlPoints.Add(new ControlPoint(position));
+        //    ControlPoints.Add(new ControlPoint(Point.Add(position, new Vector(0.1, 0))));
+        //}
+
+
+        public void AddControlPoint(Point position)
+        {
+            var newControlPoint = new ControlPoint(position);
+            ControlPoints.Add(newControlPoint);
+        }
     }
 
 }

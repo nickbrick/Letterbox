@@ -11,28 +11,8 @@
             <RowDefinition/>
         </Grid.RowDefinitions>
         <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="200*"/>
-            <ColumnDefinition Width="171*"/>
+            <ColumnDefinition/>
         </Grid.ColumnDefinitions>
-        <local:CurveEditor Margin="0,0,-0.4,0"/>
-        <Canvas Grid.Column="1" Margin="0" Background="#FFC8C8C8">
-            <Path Stroke="#0000FF" StrokeThickness="3" Fill="#400000FF">
-                <Path.Data>
-                    <PathGeometry>
-                        <PathGeometry.Figures>
-                            <PathFigure StartPoint="0,0" IsClosed="False">
-                                <PolyBezierSegment
-                        Points="0,100 100,100 100,0
-                                0,200 200,200 200,0"/>
-                                <!--<PolyBezierSegment
-                                Points="
-                                300,300 000,300 300,0
-                                200,200 300,200 00,300"/>-->
-                            </PathFigure>
-                        </PathGeometry.Figures>
-                    </PathGeometry>
-                </Path.Data>
-            </Path>
-        </Canvas>
+        <local:CurveEditor x:Name="CurveEditor" Margin="0" Background="#00000000"/>
     </Grid>
 </Window>

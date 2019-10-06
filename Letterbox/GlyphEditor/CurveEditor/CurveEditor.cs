@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Shapes;
 
@@ -13,31 +14,50 @@ namespace Letterbox
     public class CurveEditor : Canvas
     {
         public Shape Shape { get; set; }
+        public Part ActivePart { get; set; }
         public double Scale = 50;
         public Point Origin = new Point(200, 300);
+        
 
         public CurveEditor() : base()
         {
             Shape = new Shape() { Parts = new List<Part> { new Part() } };
+            ActivePart = Shape.Parts.FirstOrDefault();
+            base.MouseDown += AddBezierControlPointAndHandle;
 
             foreach (Part part in Shape.Parts)
             {
                 this.Children.Add(part.Path);
                 foreach (ControlPoint controlPoint in part.ControlPoints)
                 {
-                    var handle = new Handle(controlPoint);
-                    handle.SetPosition(ToPixel(controlPoint.Position));
-                    this.Children.Add(handle);
+                    AddHandle(controlPoint);
                 }
                 DrawPart(part);
             }
         }
 
+
+
+
         public CurveEditor(Glyph glyph)
         {
             //Shape = glyph.Shape;
             Shape = new Shape() { Parts = new List<Part> { new Part() { ClassName = "test", Path = new Path() } } };
-            Render();
+        }
+
+        private void AddHandle(ControlPoint controlPoint, bool secondary=false)
+        {
+            Handle handle;
+            if (secondary)
+            {
+                handle = new SecondaryHandle(controlPoint);
+            }
+            else
+            {
+                handle = new Handle(controlPoint);
+            }
+            handle.SetPosition(ToPixel(controlPoint.Position));
+            this.Children.Add(handle);
         }
 
         public void DrawShape()
@@ -68,15 +88,53 @@ namespace Letterbox
             //}
         }
 
-        private Point ToPixel(Point model)
+        private Matrix GetTransformationToPixelMatrix(bool inverse = false)
         {
-            var screen = Point.Multiply(model, new System.Windows.Media.Matrix(Scale, 0, 0, -Scale, Origin.X, Origin.Y));
-            return screen;
+            var matrix = new Matrix(Scale, 0, 0, -Scale, Origin.X, Origin.Y);
+            if (inverse) {
+                matrix.Invert();
+            }
+            return matrix;
         }
 
-        private void Render()
+        private Point ToPixel(Point model)
         {
-            throw new NotImplementedException();
+            var pixel = Point.Multiply(model, GetTransformationToPixelMatrix());
+            return pixel;
+        }
+
+        private Point ToModel(Point pixel)
+        {
+            var model = Point.Multiply(pixel, GetTransformationToPixelMatrix(true));
+            return model;
+        }
+
+        private void AddBezierControlPointAndHandle(object sender, MouseButtonEventArgs e)
+        {
+            var mousePixel = e.GetPosition(this);
+            var mouseModel = ToModel(mousePixel);
+            ControlPoint newControlPoint;
+
+            for (double offset = -0.3; offset <= 0.3; offset += 0.3)
+            {
+                var model = Point.Add(mouseModel, new Vector(offset, offset));
+                newControlPoint = new ControlPoint(model);
+                ActivePart.ControlPoints.Add(newControlPoint);
+                var isSecondary = (offset != 0);
+                AddHandle(newControlPoint, isSecondary);
+            }
+            DrawPart(ActivePart);
+        }
+
+        private void AddControlPointAndHandle(object sender, MouseButtonEventArgs e)
+        {
+            var mousePixel = e.GetPosition(this);
+            var mouseModel = ToModel(mousePixel);
+            var newControlPoint = new ControlPoint(mouseModel);
+            ActivePart.ControlPoints.Add(newControlPoint);
+            AddHandle(newControlPoint, ((ActivePart.ControlPoints.Count - 1) % 3 > 0));
+            DrawPart(ActivePart);
+            Console.WriteLine(mouseModel.ToString());
         }
     }
 }

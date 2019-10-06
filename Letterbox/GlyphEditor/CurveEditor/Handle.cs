@@ -27,4 +27,14 @@ namespace Letterbox
             Margin = new Thickness(x - Size / 2, y - Size / 2, 0, 0);
         }
     }
+
+    public class SecondaryHandle : Handle
+    {
+        public SecondaryHandle(ControlPoint controlPoint) : base(controlPoint)
+        {
+            Size = 5;
+            Width = Size;
+            Height = Size;
+        }
+    }
 }

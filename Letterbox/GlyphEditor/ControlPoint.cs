@@ -12,9 +12,9 @@ namespace Letterbox
         public Point Position { get; set; }
         public HashSet<Influence> Influences;
 
-        public ControlPoint(double x, double y)
+        public ControlPoint(Point position)
         {
-            Position = new Point(x, y);
+            Position = position;
 
         }
     }
