@@ -23,7 +23,7 @@ namespace Letterbox
         {
             Shape = new Shape() { Parts = new List<Part> { new Part() } };
             ActivePart = Shape.Parts.FirstOrDefault();
-            base.MouseDown += AddBezierControlPointAndHandle;
+            base.MouseDown += AddBezierControlPoint;
             ActivePart.ControlPointInserted += ActivePart_ControlPointInserted;
 
             foreach (Part part in Shape.Parts)
@@ -36,19 +36,16 @@ namespace Letterbox
                 DrawPart(part);
             }
         }
-
-        private void ActivePart_ControlPointInserted(object part, PartEventArgs e)
-        {
-            AddHandle(e.ControlPoint);
-            DrawPart(ActivePart);
-        }
-
         public CurveEditor(Glyph glyph)
         {
             //Shape = glyph.Shape;
             Shape = new Shape() { Parts = new List<Part> { new Part() { ClassName = "test", Path = new Path() } } };
         }
-
+        private void ActivePart_ControlPointInserted(object part, PartEventArgs e)
+        {
+            AddHandle(e.ControlPoint);
+            DrawPart(ActivePart);
+        }
         private void AddHandle(ControlPoint controlPoint)
         {
             Handle handle;
@@ -80,7 +77,6 @@ namespace Letterbox
                 DrawPart(part);
             }
         }
-
         public void DrawPart(Part part)
         {
             var controlPoints = part.ControlPoints;
@@ -100,7 +96,6 @@ namespace Letterbox
             );
             //}
         }
-
         private Matrix GetTransformationToPixelMatrix(bool inverse = false)
         {
             var matrix = new Matrix(Scale, 0, 0, -Scale, Origin.X, Origin.Y);
@@ -110,40 +105,30 @@ namespace Letterbox
             }
             return matrix;
         }
-
         private Point ToPixel(Point model)
         {
             var pixel = Point.Multiply(model, GetTransformationToPixelMatrix());
             return pixel;
         }
-
         private Point ToModel(Point pixel)
         {
             var model = Point.Multiply(pixel, GetTransformationToPixelMatrix(inverse: true));
             return model;
         }
-
-        private void AddBezierControlPointAndHandle(object sender, MouseButtonEventArgs e)
+        private void AddBezierControlPoint(object sender, MouseButtonEventArgs e)
         {
             var mousePixel = e.GetPosition(this);
             var mouseModel = ToModel(mousePixel);
+            Point model;
+            model = Point.Add(mouseModel, new Vector(-0.3, -0.3));
+            ActivePart.AddControlPoint(model, ControlPointType.Secondary);
+            model = mouseModel;
+            ActivePart.AddControlPoint(model, ControlPointType.Primary);
+            model = Point.Add(mouseModel, new Vector(0.3, 0.3));
+            ActivePart.AddControlPoint(model, ControlPointType.Secondary);
 
-            for (double offset = -0.3; offset <= 0.3; offset += 0.3)
-            {
-                var model = Point.Add(mouseModel, new Vector(offset, offset));
-                ActivePart.AddControlPoint(model, offset == 0 ? ControlPointType.Primary : ControlPointType.Secondary);
-            }
-            DrawPart(ActivePart);
-        }
 
-        private void AddControlPointAndHandle(object sender, MouseButtonEventArgs e)
-        {
-            var mousePixel = e.GetPosition(this);
-            var mouseModel = ToModel(mousePixel);
-            var newControlPoint = new ControlPoint(mouseModel);
-            ActivePart.ControlPoints.Add(newControlPoint);
             DrawPart(ActivePart);
-            Console.WriteLine(mouseModel.ToString());
         }
     }
 }
