@@ -16,6 +16,9 @@ namespace Letterbox
         public List<ControlPoint> ControlPoints;
         public GeometryCollection geometries = new GeometryCollection();
 
+        public delegate void PartEventHandler(object part, PartEventArgs e);
+        public event PartEventHandler ControlPointInserted;
+
         public Part()
         {
             ClassName = "Default";
@@ -38,11 +41,24 @@ namespace Letterbox
         //}
 
 
-        public void AddControlPoint(Point position)
+        public void AddControlPoint(Point position, ControlPointType type)
         {
-            var newControlPoint = new ControlPoint(position);
+            var newControlPoint = new ControlPoint(position, type);
             ControlPoints.Add(newControlPoint);
+            ControlPointInserted(this, new PartEventArgs(this, newControlPoint, ControlPoints.Count));
         }
     }
 
+    public class PartEventArgs : EventArgs
+    {
+        public Part Part { get; private set; }
+        public ControlPoint ControlPoint { get; private set; }
+        public int Position { get; private set; }
+        public PartEventArgs(Part part, ControlPoint controlPoint, int position)
+        {
+            Part = part;
+            ControlPoint = controlPoint;
+            Position = position;
+        }
+    }
 }

@@ -69,7 +69,7 @@
     <Compile Include="GlyphEditor\LetterStrip\LetterButton.cs" />
     <Compile Include="GlyphEditor\LetterStrip\LetterStrip.cs" />
     <Compile Include="GlyphEditor\LetterStrip\LetterStripEventArgs.cs" />
-    <Compile Include="Part\Part.cs" />
+    <Compile Include="Glyph\Part.cs" />
     <Compile Include="Sandbox.xaml.cs">
       <DependentUpon>Sandbox.xaml</DependentUpon>
     </Compile>

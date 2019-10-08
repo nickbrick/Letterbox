@@ -11,12 +11,18 @@ namespace Letterbox
     {
         public Point Position { get; set; }
         public HashSet<Influence> Influences;
+        public ControlPointType Type { get; set; }
 
-        public ControlPoint(Point position)
+        public ControlPoint(Point position, ControlPointType type=ControlPointType.Primary)
         {
             Position = position;
-
+            Type = type;
         }
     }
 
+    public enum ControlPointType
+    {
+        Primary,
+        Secondary
+    }
 }

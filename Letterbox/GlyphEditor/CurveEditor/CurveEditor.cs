@@ -17,13 +17,14 @@ namespace Letterbox
         public Part ActivePart { get; set; }
         public double Scale = 50;
         public Point Origin = new Point(200, 300);
-        
+
 
         public CurveEditor() : base()
         {
             Shape = new Shape() { Parts = new List<Part> { new Part() } };
             ActivePart = Shape.Parts.FirstOrDefault();
             base.MouseDown += AddBezierControlPointAndHandle;
+            ActivePart.ControlPointInserted += ActivePart_ControlPointInserted;
 
             foreach (Part part in Shape.Parts)
             {
@@ -36,8 +37,11 @@ namespace Letterbox
             }
         }
 
-
-
+        private void ActivePart_ControlPointInserted(object part, PartEventArgs e)
+        {
+            AddHandle(e.ControlPoint);
+            DrawPart(ActivePart);
+        }
 
         public CurveEditor(Glyph glyph)
         {
@@ -45,21 +49,30 @@ namespace Letterbox
             Shape = new Shape() { Parts = new List<Part> { new Part() { ClassName = "test", Path = new Path() } } };
         }
 
-        private void AddHandle(ControlPoint controlPoint, bool secondary=false)
+        private void AddHandle(ControlPoint controlPoint)
         {
             Handle handle;
-            if (secondary)
+            switch (controlPoint.Type)
             {
-                handle = new SecondaryHandle(controlPoint);
-            }
-            else
-            {
-                handle = new Handle(controlPoint);
+                case ControlPointType.Primary:
+                    {
+                        handle = new Handle(controlPoint);
+                        break;
+                    }
+                case ControlPointType.Secondary:
+                    {
+                        handle = new SecondaryHandle(controlPoint);
+                        break;
+                    }
+                default:
+                    {
+                        handle = new Handle(controlPoint);
+                        break;
+                    }
             }
             handle.SetPosition(ToPixel(controlPoint.Position));
             this.Children.Add(handle);
         }
-
         public void DrawShape()
         {
             foreach (Part part in Shape.Parts)
@@ -91,7 +104,8 @@ namespace Letterbox
         private Matrix GetTransformationToPixelMatrix(bool inverse = false)
         {
             var matrix = new Matrix(Scale, 0, 0, -Scale, Origin.X, Origin.Y);
-            if (inverse) {
+            if (inverse)
+            {
                 matrix.Invert();
             }
             return matrix;
@@ -105,7 +119,7 @@ namespace Letterbox
 
         private Point ToModel(Point pixel)
         {
-            var model = Point.Multiply(pixel, GetTransformationToPixelMatrix(true));
+            var model = Point.Multiply(pixel, GetTransformationToPixelMatrix(inverse: true));
             return model;
         }
 
@@ -113,15 +127,11 @@ namespace Letterbox
         {
             var mousePixel = e.GetPosition(this);
             var mouseModel = ToModel(mousePixel);
-            ControlPoint newControlPoint;
 
             for (double offset = -0.3; offset <= 0.3; offset += 0.3)
             {
                 var model = Point.Add(mouseModel, new Vector(offset, offset));
-                newControlPoint = new ControlPoint(model);
-                ActivePart.ControlPoints.Add(newControlPoint);
-                var isSecondary = (offset != 0);
-                AddHandle(newControlPoint, isSecondary);
+                ActivePart.AddControlPoint(model, offset == 0 ? ControlPointType.Primary : ControlPointType.Secondary);
             }
             DrawPart(ActivePart);
         }
@@ -132,7 +142,6 @@ namespace Letterbox
             var mouseModel = ToModel(mousePixel);
             var newControlPoint = new ControlPoint(mouseModel);
             ActivePart.ControlPoints.Add(newControlPoint);
-            AddHandle(newControlPoint, ((ActivePart.ControlPoints.Count - 1) % 3 > 0));
             DrawPart(ActivePart);
             Console.WriteLine(mouseModel.ToString());
         }
