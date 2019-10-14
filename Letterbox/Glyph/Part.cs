@@ -18,6 +18,7 @@ namespace Letterbox
 
         public delegate void PartEventHandler(object part, PartEventArgs e);
         public event PartEventHandler ControlPointInserted;
+        public event PartEventHandler BezierControlPointInserted;
 
         public Part()
         {
@@ -33,32 +34,37 @@ namespace Letterbox
             ControlPoints.Add(new ControlPoint(new Point(1.1, 0.1)));
         }
 
-        //public void AddBezierControlPoint(Point position)
-        //{
-        //    ControlPoints.Add(new ControlPoint(Point.Add(position, new Vector(-0.1, 0))));
-        //    ControlPoints.Add(new ControlPoint(position));
-        //    ControlPoints.Add(new ControlPoint(Point.Add(position, new Vector(0.1, 0))));
-        //}
+        public void AddBezierControlPoint(Point position)
+        {
+            var beforeControlPoint = new ControlPoint(Point.Add(position, new Vector(-0.3, -0.3)));
+            var primaryControlPoint = new ControlPoint(position);
+            var afterControlPoint = new ControlPoint(Point.Add(position, new Vector(0.3, 0.3)));
+            ControlPoints.Add(beforeControlPoint);
+            ControlPoints.Add(primaryControlPoint);
+            ControlPoints.Add(afterControlPoint);
+
+            BezierControlPointInserted(this, new PartEventArgs(this, new List<ControlPoint> { beforeControlPoint, primaryControlPoint, afterControlPoint }, ControlPoints.Count));
+        }
 
 
         public void AddControlPoint(Point position, ControlPointType type)
         {
             var newControlPoint = new ControlPoint(position, type);
             ControlPoints.Add(newControlPoint);
-            ControlPointInserted(this, new PartEventArgs(this, newControlPoint, ControlPoints.Count));
+            ControlPointInserted(this, new PartEventArgs(this, new List<ControlPoint> { newControlPoint }, ControlPoints.Count));
         }
     }
 
     public class PartEventArgs : EventArgs
     {
         public Part Part { get; private set; }
-        public ControlPoint ControlPoint { get; private set; }
-        public int Position { get; private set; }
-        public PartEventArgs(Part part, ControlPoint controlPoint, int position)
+        public List<ControlPoint> ControlPoints { get; private set; }
+        public int Index { get; private set; }
+        public PartEventArgs(Part part, List<ControlPoint> controlPoints, int index)
         {
             Part = part;
-            ControlPoint = controlPoint;
-            Position = position;
+            ControlPoints = controlPoints;
+            Index = index;
         }
     }
 }
