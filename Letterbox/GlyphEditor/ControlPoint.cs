@@ -18,6 +18,10 @@ namespace Letterbox
             Position = position;
             Type = type;
         }
+        public void SetPostition(Point position)
+        {
+            Position = position;
+        }
     }
 
     public enum ControlPointType

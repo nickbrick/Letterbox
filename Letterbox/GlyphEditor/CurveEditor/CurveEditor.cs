@@ -16,16 +16,16 @@ namespace Letterbox
         public Shape Shape { get; set; }
         public Part ActivePart { get; set; }
         public double Scale = 50;
-        public Point Origin = new Point(200, 300);
         private List<Handle> SelectedHandles = new List<Handle>();
-        private Point lastClickPosition = new Point();
+        public Navigation Navigation = new Navigation();
 
         public CurveEditor() : base()
         {
             Shape = new Shape() { Parts = new List<Part> { new Part() } };
             ActivePart = Shape.Parts.FirstOrDefault();
-            base.MouseLeftButtonDown += AddBezierControlPoint;
-            base.PreviewMouseLeftButtonDown += CurveEditor_PreviewMouseLeftButtonDown;
+            base.MouseRightButtonDown += AddBezierControlPoint;
+            base.MouseDown += CurveEditor_MouseDown;
+
             base.PreviewMouseMove += CurveEditor_MouseMove;
             ActivePart.ControlPointInserted += ActivePart_ControlPointInserted;
             ActivePart.BezierControlPointInserted += ActivePart_BezierControlPointInserted;
@@ -33,9 +33,11 @@ namespace Letterbox
             foreach (Part part in Shape.Parts)
             {
                 this.Children.Add(part.Path);
-                foreach (ControlPoint controlPoint in part.ControlPoints)
+                foreach (ControlPoint controlPoint in part.ControlPoints.Where(point => point.Type == ControlPointType.Primary))
                 {
-                    AddHandle(controlPoint);
+                    var index = part.ControlPoints.IndexOf(controlPoint);
+                    var triplet = new List<ControlPoint> { part.ControlPoints.ElementAt(index - 1), controlPoint, part.ControlPoints.ElementAt(index + 1) };
+                    AddHandles(triplet);
                 }
                 DrawPart(part);
             }
@@ -45,21 +47,24 @@ namespace Letterbox
             }
         }
 
-        private void CurveEditor_PreviewMouseLeftButtonDown(object sender, MouseButtonEventArgs e)
+        private void CurveEditor_MouseDown(object sender, MouseButtonEventArgs e)
         {
-            lastClickPosition = e.GetPosition(this);
+            if (e.MiddleButton == MouseButtonState.Pressed)
+            {
+                Navigation.PanStart= e.GetPosition(this);
+                Navigation.InitialOrigin = Navigation.Origin;
+            }
         }
 
         private void CurveEditor_MouseMove(object sender, MouseEventArgs e)
         {
-            //foreach (var handle in SelectedHandles)
             if (e.LeftButton == MouseButtonState.Pressed)
             {
                 foreach (var handle in SelectedHandles)
                 {
                     if (handle != null)
                     {
-                        handle.SetPosition(e.GetPosition(this));
+                        handle.SetPosition(Point.Add(e.GetPosition(this), handle.Difference));
                         if (!(handle is SecondaryHandle))
                         {
                             var child = handle.ChildBefore;
@@ -70,6 +75,11 @@ namespace Letterbox
                     }
                 }
                 Console.WriteLine("move");
+            }
+            if (e.MiddleButton == MouseButtonState.Pressed)
+            {
+                Navigation.Origin = Point.Add(Navigation.InitialOrigin, (Vector)(Point.Subtract(e.GetPosition(this), (Vector)Navigation.PanStart)));
+                DrawShape();
             }
         }
 
@@ -82,17 +92,18 @@ namespace Letterbox
 
         private void Handle_PositionChanged(object sender, HandleEventArgs e)
         {
+            var handle = (Handle)sender;
+            handle.ControlPoint.SetPostition(ToModel(e.Position));
+
             if (sender is SecondaryHandle)
             {
-                var handle = (SecondaryHandle)sender;
-                var parent = handle.Parent;
-                handle.Arm.X1 = e.Position.X;
-                handle.Arm.Y1 = e.Position.Y;
-                handle.Arm.X2 = parent.GetPosition().X;
-                handle.Arm.Y2 = parent.GetPosition().Y;
+                var secondaryHandle = (SecondaryHandle)sender;
+                var parent = secondaryHandle.Parent;
+                secondaryHandle.Arm.X1 = e.Position.X;
+                secondaryHandle.Arm.Y1 = e.Position.Y;
+                secondaryHandle.Arm.X2 = parent.GetPosition().X;
+                secondaryHandle.Arm.Y2 = parent.GetPosition().Y;
             }
-            var handle = (Handle)sender;
-            handle.ControlPoint.set
             DrawPart(ActivePart);
         }
 
@@ -101,18 +112,19 @@ namespace Letterbox
             Handle handle = (Handle)sender;
             SelectedHandles.Clear();
             Console.WriteLine(SelectedHandles.Count);
-
         }
 
         private void Handle_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
         {
             Handle handle = (Handle)sender;
             SelectedHandles.Add(handle);
+            handle.GetDifference(e.GetPosition(this));
             if (!(handle is SecondaryHandle))
             {
                 handle.ChildBefore.GetDifference();
                 handle.ChildAfter.GetDifference();
             }
+            e.Handled = true;
             Console.WriteLine(SelectedHandles.Count);
         }
 
@@ -129,7 +141,7 @@ namespace Letterbox
         }
         private void ActivePart_BezierControlPointInserted(object part, PartEventArgs e)
         {
-            AddHandle(e.ControlPoints);
+            AddHandles(e.ControlPoints);
             DrawPart(ActivePart);
         }
         private void AddHandle(ControlPoint controlPoint)
@@ -157,7 +169,7 @@ namespace Letterbox
             this.Children.Add(handle);
             RegisterHandleEvents(handle);
         }
-        private void AddHandle(List<ControlPoint> controlPoints)
+        private void AddHandles(List<ControlPoint> controlPoints)
         {
             var beforeHandle = new SecondaryHandle(controlPoints.First());
             var mainHandle = new Handle(controlPoints.ElementAt(1));
@@ -169,8 +181,8 @@ namespace Letterbox
             mainHandle.SetPosition(ToPixel(controlPoints.ElementAt(1).Position));
             afterHandle.SetPosition(ToPixel(controlPoints.Last().Position));
 
-            this.Children.Add(beforeHandle);
             this.Children.Add(mainHandle);
+            this.Children.Add(beforeHandle);
             this.Children.Add(afterHandle);
 
             beforeHandle.SetParent(mainHandle);
@@ -186,7 +198,11 @@ namespace Letterbox
         }
         public void DrawShape()
         {
-            foreach (Part part in Shape.Parts)
+            foreach (var handle in Children.OfType<Handle>())
+            {
+                handle.SetPosition(ToPixel(handle.ControlPoint.Position));
+            }
+                foreach (Part part in Shape.Parts)
             {
                 DrawPart(part);
             }
@@ -200,9 +216,9 @@ namespace Letterbox
                 new PathFigureCollection(
                     new List<PathFigure> {
                         new PathFigure(
-                            ToPixel(controlPoints.FirstOrDefault().Position),
+                            ToPixel(controlPoints.ElementAt(1).Position),
                             new List<PolyBezierSegment> {
-                                new PolyBezierSegment(controlPoints.Skip(1).Select(point => ToPixel(point.Position)), true)
+                                new PolyBezierSegment(controlPoints.Skip(2).Select(point => ToPixel(point.Position)), true)
                             },
                             false)
                     }
@@ -212,7 +228,7 @@ namespace Letterbox
         }
         private Matrix GetTransformationToPixelMatrix(bool inverse = false)
         {
-            var matrix = new Matrix(Scale, 0, 0, -Scale, Origin.X, Origin.Y);
+            var matrix = new Matrix(Scale, 0, 0, -Scale, Navigation.Origin.X, Navigation.Origin.Y);
             if (inverse)
             {
                 matrix.Invert();

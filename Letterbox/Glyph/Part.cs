@@ -27,23 +27,24 @@ namespace Letterbox
             Path.Stroke = System.Windows.Media.Brushes.Black;
 
             ControlPoints = new List<ControlPoint>();
-            ControlPoints.Add(new ControlPoint(new Point(-1, 0)));
-            ControlPoints.Add(new ControlPoint(new Point(-1, 2)));
-            ControlPoints.Add(new ControlPoint(new Point(1, 2)));
-            ControlPoints.Add(new ControlPoint(new Point(1, 0)));
-            ControlPoints.Add(new ControlPoint(new Point(1.1, 0.1)));
+            AddBezierControlPoint(new Point(-1, 0));
+            AddBezierControlPoint(new Point(-1, 2));
+            AddBezierControlPoint(new Point(1, 2));
+            AddBezierControlPoint(new Point(1, 0));
         }
 
         public void AddBezierControlPoint(Point position)
         {
-            var beforeControlPoint = new ControlPoint(Point.Add(position, new Vector(-0.3, -0.3)));
-            var primaryControlPoint = new ControlPoint(position);
-            var afterControlPoint = new ControlPoint(Point.Add(position, new Vector(0.3, 0.3)));
+            var beforeControlPoint = new ControlPoint(Point.Add(position, new Vector(-0.3, -0.3)), ControlPointType.Secondary);
+            var primaryControlPoint = new ControlPoint(position, ControlPointType.Primary);
+            var afterControlPoint = new ControlPoint(Point.Add(position, new Vector(0.3, 0.3)), ControlPointType.Secondary);
             ControlPoints.Add(beforeControlPoint);
             ControlPoints.Add(primaryControlPoint);
             ControlPoints.Add(afterControlPoint);
 
-            BezierControlPointInserted(this, new PartEventArgs(this, new List<ControlPoint> { beforeControlPoint, primaryControlPoint, afterControlPoint }, ControlPoints.Count));
+            var handler = BezierControlPointInserted;
+            if (handler != null)
+                BezierControlPointInserted(this, new PartEventArgs(this, new List<ControlPoint> { beforeControlPoint, primaryControlPoint, afterControlPoint }, ControlPoints.Count));
         }
 
 

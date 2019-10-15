@@ -27,6 +27,8 @@ namespace Letterbox
         public GlyphEditor()
         {
             InitializeComponent();
+            curveEditor.Navigation.Origin = new Point(curveEditor.ActualWidth / 2, curveEditor.ActualHeight / 2);
+            curveEditor.DrawShape();
             Open(new Glyph("a"));
             Render();
         }

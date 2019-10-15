@@ -64,6 +64,7 @@
     <Compile Include="GlyphEditor\ControlPoint.cs" />
     <Compile Include="GlyphEditor\CurveEditor\CurveEditor.cs" />
     <Compile Include="GlyphEditor\CurveEditor\Handle.cs" />
+    <Compile Include="GlyphEditor\CurveEditor\Navigation.cs" />
     <Compile Include="GlyphEditor\Guideline.cs" />
     <Compile Include="GlyphEditor\Influence.cs" />
     <Compile Include="GlyphEditor\LetterStrip\LetterButton.cs" />
