@@ -74,6 +74,7 @@
     <Compile Include="Sandbox.xaml.cs">
       <DependentUpon>Sandbox.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Typeface\ExampleTypeface.cs" />
     <Compile Include="Typeface\Parameter.cs" />
     <Compile Include="Typeface\Typeface.cs" />
     <Page Include="GlyphEditor\GlyphEditor.xaml">

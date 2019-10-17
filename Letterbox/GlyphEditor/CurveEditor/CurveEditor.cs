@@ -17,19 +17,39 @@ namespace Letterbox
         public Part ActivePart { get; set; }
         public double Scale = 50;
         private List<Handle> SelectedHandles = new List<Handle>();
-        public Navigation Navigation = new Navigation();
+        //public Navigation Navigation { get; set; }// = new Navigation();
+
+
+        public Navigation Navigation {
+            get { return (Navigation)GetValue(NavigationProperty); }
+            set { SetValue(NavigationProperty, value); }
+        }
+
+        // Using a DependencyProperty as the backing store for Navigation.  This enables animation, styling, binding, etc...
+        public static readonly DependencyProperty NavigationProperty =
+            DependencyProperty.Register("Navigation", typeof(Navigation), typeof(CurveEditor), new PropertyMetadata());
+
+
 
         public CurveEditor() : base()
         {
             Shape = new Shape() { Parts = new List<Part> { new Part() } };
             ActivePart = Shape.Parts.FirstOrDefault();
-            base.MouseRightButtonDown += AddBezierControlPoint;
-            base.MouseDown += CurveEditor_MouseDown;
+            Navigation = new Navigation();
+            RegisterEvents();
+            InitContent();
+        }
+        public CurveEditor(Glyph glyph)
+        {
+            //Shape = glyph.Shape;
+            Shape = new Shape() { Parts = new List<Part> { new Part() { ClassName = "test", Path = new Path() } } };
+            ActivePart = Shape.Parts.FirstOrDefault();
+            RegisterEvents();
+            InitContent();
+        }
 
-            base.PreviewMouseMove += CurveEditor_MouseMove;
-            ActivePart.ControlPointInserted += ActivePart_ControlPointInserted;
-            ActivePart.BezierControlPointInserted += ActivePart_BezierControlPointInserted;
-
+        private void InitContent()
+        {
             foreach (Part part in Shape.Parts)
             {
                 this.Children.Add(part.Path);
@@ -46,50 +66,82 @@ namespace Letterbox
                 RegisterHandleEvents(handle);
             }
         }
+        private void RegisterEvents()
+        {
+            base.MouseRightButtonDown += CurveEditor_MouseRightButtonDown;
+            base.MouseDown += CurveEditor_MouseDown;
+            base.MouseUp += CurveEditor_MouseUp;
+            base.PreviewMouseMove += CurveEditor_MouseMove;
+            ActivePart.ControlPointInserted += ActivePart_ControlPointInserted;
+            ActivePart.BezierControlPointInserted += ActivePart_BezierControlPointInserted;
+        }
 
+        private void CurveEditor_MouseUp(object sender, MouseButtonEventArgs e)
+        {
+            ReleaseMouseCapture();
+        }
         private void CurveEditor_MouseDown(object sender, MouseButtonEventArgs e)
         {
+            //CaptureMouse();
             if (e.MiddleButton == MouseButtonState.Pressed)
             {
-                Navigation.PanStart= e.GetPosition(this);
+                Navigation.PanStart = e.GetPosition(this);
                 Navigation.InitialOrigin = Navigation.Origin;
             }
         }
-
-        private void CurveEditor_MouseMove(object sender, MouseEventArgs e)
+        private void CurveEditor_MouseRightButtonDown(object sender, MouseButtonEventArgs e)
         {
+            var mousePixel = e.GetPosition(this);
+            var mouseModel = ToModel(mousePixel);
+
+            ActivePart.AddBezierControlPoint(mouseModel);
+
+            DrawPart(ActivePart);
+        }
+        public void CurveEditor_MouseMove(object sender, MouseEventArgs e)
+        {
+            Navigation.CurrentMouseModel = ToModel(e.GetPosition(this));
+            Navigation.CurrentMousePixel = e.GetPosition(this);
+            
             if (e.LeftButton == MouseButtonState.Pressed)
             {
-                foreach (var handle in SelectedHandles)
-                {
-                    if (handle != null)
-                    {
-                        handle.SetPosition(Point.Add(e.GetPosition(this), handle.Difference));
-                        if (!(handle is SecondaryHandle))
-                        {
-                            var child = handle.ChildBefore;
-                            var dif = child.Difference;
-                            handle.ChildBefore.SetPosition(Point.Add(handle.GetPosition(), handle.ChildBefore.Difference));
-                            handle.ChildAfter.SetPosition(Point.Add(handle.GetPosition(), handle.ChildAfter.Difference));
-                        }
-                    }
-                }
-                Console.WriteLine("move");
+                DragHandles(e);
             }
             if (e.MiddleButton == MouseButtonState.Pressed)
             {
-                Navigation.Origin = Point.Add(Navigation.InitialOrigin, (Vector)(Point.Subtract(e.GetPosition(this), (Vector)Navigation.PanStart)));
-                DrawShape();
+                Pan(e);
             }
         }
 
+        private void Pan(MouseEventArgs e)
+        {
+            Navigation.Origin = Point.Add(Navigation.InitialOrigin, (Vector)(Point.Subtract(e.GetPosition(this), (Vector)Navigation.PanStart)));
+            DrawShape();
+        }
+
+        private void DragHandles(MouseEventArgs e)
+        {
+            foreach (var handle in SelectedHandles)
+            {
+                if (handle != null)
+                {
+                    handle.SetPosition(Point.Add(e.GetPosition(this), handle.Difference));
+                    if (!(handle is SecondaryHandle))
+                    {
+                        var child = handle.ChildBefore;
+                        var dif = child.Difference;
+                        handle.ChildBefore.SetPosition(Point.Add(handle.GetPosition(), handle.ChildBefore.Difference));
+                        handle.ChildAfter.SetPosition(Point.Add(handle.GetPosition(), handle.ChildAfter.Difference));
+                    }
+                }
+            }
+        }
         private void RegisterHandleEvents(Handle handle)
         {
             handle.PreviewMouseLeftButtonDown += Handle_MouseLeftButtonDown;
             handle.PreviewMouseLeftButtonUp += Handle_MouseLeftButtonUp;
             handle.PositionChanged += Handle_PositionChanged;
         }
-
         private void Handle_PositionChanged(object sender, HandleEventArgs e)
         {
             var handle = (Handle)sender;
@@ -106,14 +158,11 @@ namespace Letterbox
             }
             DrawPart(ActivePart);
         }
-
         private void Handle_MouseLeftButtonUp(object sender, MouseButtonEventArgs e)
         {
             Handle handle = (Handle)sender;
             SelectedHandles.Clear();
-            Console.WriteLine(SelectedHandles.Count);
         }
-
         private void Handle_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
         {
             Handle handle = (Handle)sender;
@@ -125,14 +174,8 @@ namespace Letterbox
                 handle.ChildAfter.GetDifference();
             }
             e.Handled = true;
-            Console.WriteLine(SelectedHandles.Count);
         }
 
-        public CurveEditor(Glyph glyph)
-        {
-            //Shape = glyph.Shape;
-            Shape = new Shape() { Parts = new List<Part> { new Part() { ClassName = "test", Path = new Path() } } };
-        }
         private void ActivePart_ControlPointInserted(object part, PartEventArgs e)
         {
             AddHandle(e.ControlPoints.First());
@@ -202,7 +245,7 @@ namespace Letterbox
             {
                 handle.SetPosition(ToPixel(handle.ControlPoint.Position));
             }
-                foreach (Part part in Shape.Parts)
+            foreach (Part part in Shape.Parts)
             {
                 DrawPart(part);
             }
@@ -244,15 +287,6 @@ namespace Letterbox
         {
             var model = Point.Multiply(pixel, GetTransformationToPixelMatrix(inverse: true));
             return model;
-        }
-        private void AddBezierControlPoint(object sender, MouseButtonEventArgs e)
-        {
-            var mousePixel = e.GetPosition(this);
-            var mouseModel = ToModel(mousePixel);
-
-            ActivePart.AddBezierControlPoint(mouseModel);
-
-            DrawPart(ActivePart);
         }
     }
 }

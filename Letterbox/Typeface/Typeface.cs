@@ -8,9 +8,9 @@ namespace Letterbox
 {
     public class Typeface
     {
-        SortedSet<Glyph> Glyphs;
-        //HashSet<Part> Parts;
-        HashSet<Parameter> Parameters;
+        public SortedSet<Glyph> Glyphs;
+        //public HashSet<Part> Parts;
+        public HashSet<Parameter> Parameters;
 
         public Typeface()
         {

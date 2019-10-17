@@ -21,9 +21,12 @@
             <ColumnDefinition Width="50"/>
         </Grid.ColumnDefinitions>
         <!--<Label Content="{Binding Workpiece.Character, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type local:GlyphEditor}}}" Margin="0" FontSize="120" FontStyle="Italic" Grid.Column="2" MinWidth="50" MinHeight="100" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" Foreground="White"/>-->
-        <local:CurveEditor x:Name="curveEditor" Grid.Column="2" Background="#FFD8B4B4"/>
-        <local:LetterStrip FlowDirection="RightToLeft" Grid.RowSpan="2" VerticalAlignment="Center"></local:LetterStrip>
-        <local:LetterStrip FlowDirection="LeftToRight" Grid.RowSpan="2" Grid.Column="4" VerticalAlignment="Center"></local:LetterStrip>
-        <local:LetterStrip FlowDirection="LeftToRight" Grid.Column="1" Orientation="Horizontal" Grid.Row="1" Grid.ColumnSpan="3" HorizontalAlignment="Center"/>
+        <local:CurveEditor x:Name="curveEditor" Grid.Column="1" Background="#00000000" Grid.ColumnSpan="3" >
+        <Label Content="{Binding Navigation.CurrentMousePixel, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type local:CurveEditor}}}" Canvas.Left="10" Canvas.Top="10" Grid.Column="1" Grid.ColumnSpan="3" Foreground="White" FontSize="18" Background="{x:Null}" HorizontalAlignment="Left" VerticalAlignment="Top"/>
+        </local:CurveEditor>
+        <local:LetterStrip FlowDirection="RightToLeft" Grid.RowSpan="3" VerticalAlignment="Center" Height="464"></local:LetterStrip>
+        <local:LetterStrip FlowDirection="LeftToRight" Grid.RowSpan="3" Grid.Column="4" VerticalAlignment="Center" Height="464"></local:LetterStrip>
+        <local:LetterStrip FlowDirection="LeftToRight" Grid.Column="1" Orientation="Horizontal" Grid.Row="2" Grid.ColumnSpan="3" HorizontalAlignment="Center" Width="693"/>
+
     </Grid>
 </Page>

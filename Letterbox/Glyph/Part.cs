@@ -24,7 +24,7 @@ namespace Letterbox
         {
             ClassName = "Default";
             Path = new Path();
-            Path.Stroke = System.Windows.Media.Brushes.Black;
+            Path.Stroke = System.Windows.Media.Brushes.White;
 
             ControlPoints = new List<ControlPoint>();
             AddBezierControlPoint(new Point(-1, 0));

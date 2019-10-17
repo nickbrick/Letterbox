@@ -28,8 +28,14 @@ namespace Letterbox
         {
             InitializeComponent();
             Loaded += GlyphEditor_Loaded;
+            //MouseMove += GlyphEditor_MouseMove;
             Open(new Glyph("a"));
             Render();
+        }
+
+        private void GlyphEditor_MouseMove(object sender, MouseEventArgs e)
+        {
+            curveEditor.CurveEditor_MouseMove(sender, e);
         }
 
         private void GlyphEditor_Loaded(object sender, RoutedEventArgs e)
