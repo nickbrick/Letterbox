@@ -33,16 +33,23 @@ namespace Letterbox
 
         public CurveEditor() : base()
         {
-            Shape = new Shape() { Parts = new List<Part> { new Part() } };
-            ActivePart = Shape.Parts.FirstOrDefault();
+            //Shape = new Shape() { Parts = new List<Part> { new Part() } };
+            //ActivePart = Shape.Parts.FirstOrDefault();
             Navigation = new Navigation();
-            RegisterEvents();
-            InitContent();
+            //RegisterEvents();
+            //InitContent();
         }
         public CurveEditor(Glyph glyph)
         {
-            //Shape = glyph.Shape;
-            Shape = new Shape() { Parts = new List<Part> { new Part() { ClassName = "test", Path = new Path() } } };
+            Shape = glyph.Shape;
+            //Shape = new Shape() { Parts = new List<Part> { new Part() { ClassName = "test", Path = new Path() } } };
+            ActivePart = Shape.Parts.FirstOrDefault();
+            RegisterEvents();
+            InitContent();
+        }
+
+        public void Init()
+        {
             ActivePart = Shape.Parts.FirstOrDefault();
             RegisterEvents();
             InitContent();

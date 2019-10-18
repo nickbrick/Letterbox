@@ -20,9 +20,11 @@ namespace Letterbox
     /// </summary>
     public partial class MainWindow : Window
     {
+        public ExampleTypeface ExampleTypeface { get; set; }
 
         public MainWindow()
         {
+            ExampleTypeface = new ExampleTypeface();
             InitializeComponent();
             //var sandbox = new Sandbox();
             //sandbox.Show();

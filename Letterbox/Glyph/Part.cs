@@ -22,15 +22,15 @@ namespace Letterbox
 
         public Part()
         {
-            ClassName = "Default";
+            //ClassName = "Default";
             Path = new Path();
             Path.Stroke = System.Windows.Media.Brushes.White;
 
             ControlPoints = new List<ControlPoint>();
-            AddBezierControlPoint(new Point(-1, 0));
-            AddBezierControlPoint(new Point(-1, 2));
-            AddBezierControlPoint(new Point(1, 2));
-            AddBezierControlPoint(new Point(1, 0));
+            //AddBezierControlPoint(new Point(-1, 0));
+            //AddBezierControlPoint(new Point(-1, 2));
+            //AddBezierControlPoint(new Point(1, 2));
+            //AddBezierControlPoint(new Point(1, 0));
         }
 
         public void AddBezierControlPoint(Point position)

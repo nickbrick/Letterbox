@@ -12,22 +12,19 @@ namespace Letterbox
         public Point Origin { get; set; }
         public Point InitialOrigin { get; set; }
         public Point PanStart { get; set; } 
-        //public Point CurrentMousePixel { get; set; }
-        public Point CurrentMouseModel { get; set; }
 
-
+        public Point CurrentMouseModel {
+            get { return (Point)GetValue(CurrentMouseModelProperty); }
+            set { SetValue(CurrentMouseModelProperty, value); }
+        }
+        public static readonly DependencyProperty CurrentMouseModelProperty =
+            DependencyProperty.Register("CurrentMouseModel", typeof(Point), typeof(Navigation), new PropertyMetadata());
 
         public Point CurrentMousePixel {
             get { return (Point)GetValue(CurrentMousePixelProperty); }
             set { SetValue(CurrentMousePixelProperty, value); }
         }
-
-        // Using a DependencyProperty as the backing store for point.  This enables animation, styling, binding, etc...
         public static readonly DependencyProperty CurrentMousePixelProperty =
             DependencyProperty.Register("CurrentMousePixel", typeof(Point), typeof(Navigation), new PropertyMetadata());
-
-
-
-
     }
 }
