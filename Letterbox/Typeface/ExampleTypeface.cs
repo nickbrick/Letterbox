@@ -13,25 +13,35 @@ namespace Letterbox
         {
             Glyphs = new SortedSet<Glyph>();
             var a = new Glyph("a") { Shape = new Shape() { Parts = new List<Part>() } } ;
-            a.Shape.Parts.Add(new Part()
+            var bowl = new Part() { ClassName = "Bowl" };
+            bowl.ControlPoints = new List<ControlPoint>()
             {
-                ClassName = "Bowl",
-                ControlPoints = new List<ControlPoint>()
+                new ControlPoint(new Point(2.64,1.8), bowl, type: ControlPointType.Secondary),
+                new ControlPoint(new Point(1.32,1.38), bowl, type: ControlPointType.Primary),
+                new ControlPoint(new Point(0.92,1.34), bowl, type: ControlPointType.Secondary),
+                new ControlPoint(new Point(0.76,1.54), bowl, type: ControlPointType.Secondary),
+                new ControlPoint(new Point(0.24,1.36), bowl, type: ControlPointType.Primary),
+                new ControlPoint(new Point(-1.32,0.82), bowl, type: ControlPointType.Secondary),
+                new ControlPoint(new Point(-1.62,-0.98), bowl, type: ControlPointType.Secondary),
+                new ControlPoint(new Point(-0.16,-0.90), bowl, type: ControlPointType.Primary),
+                new ControlPoint(new Point(0.56,-0.72), bowl, type: ControlPointType.Secondary),
+                new ControlPoint(new Point(1.4,0.34), bowl, type: ControlPointType.Secondary),
+                new ControlPoint(new Point(1.34,1.38), bowl, type: ControlPointType.Primary),
+                new ControlPoint(new Point(1.64,1.68), bowl, type: ControlPointType.Secondary)
+            };
+            a.Shape.Parts.Add(bowl);
+            var stem = new Part() { ClassName = "Stem" };
+            stem.ControlPoints = new List<ControlPoint>()
             {
-                new ControlPoint(new Point(2.64,1.8),ControlPointType.Secondary),
-                new ControlPoint(new Point(1.32,1.38),ControlPointType.Primary),
-                new ControlPoint(new Point(0.919999999999997,1.34),ControlPointType.Secondary),
-                new ControlPoint(new Point(0.76,1.54),ControlPointType.Secondary),
-                new ControlPoint(new Point(0.24,1.36),ControlPointType.Primary),
-                new ControlPoint(new Point(-1.32000000000001,0.819999999999997),ControlPointType.Secondary),
-                new ControlPoint(new Point(-1.62000000000001,-0.979999999999997),ControlPointType.Secondary),
-                new ControlPoint(new Point(-0.16,-0.900000000000002),ControlPointType.Primary),
-                new ControlPoint(new Point(0.56,-0.720000000000001),ControlPointType.Secondary),
-                new ControlPoint(new Point(1.4,0.339999999999999),ControlPointType.Secondary),
-                new ControlPoint(new Point(1.34,1.38),ControlPointType.Primary),
-                new ControlPoint(new Point(1.64,1.68),ControlPointType.Secondary)
-            }
-            });
+                new ControlPoint(new Point(3.6,1.9   ), stem, type: ControlPointType.Secondary),
+                new ControlPoint(new Point(2.28,1.48 ), stem, type: ControlPointType.Primary),
+                new ControlPoint(new Point(1.88,1.44 ), stem, type: ControlPointType.Secondary),
+                new ControlPoint(new Point(1.02,0.12 ), stem, type: ControlPointType.Secondary),
+                new ControlPoint(new Point(1.86,-0.74), stem, type: ControlPointType.Primary),
+                new ControlPoint(new Point(2.18,-0.94), stem, type: ControlPointType.Secondary)
+            };
+            a.Shape.Parts.Add(stem);
+
             Glyphs.Add(a);
         }
     }

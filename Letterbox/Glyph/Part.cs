@@ -35,9 +35,9 @@ namespace Letterbox
 
         public void AddBezierControlPoint(Point position)
         {
-            var beforeControlPoint = new ControlPoint(Point.Add(position, new Vector(-0.3, -0.3)), ControlPointType.Secondary);
-            var primaryControlPoint = new ControlPoint(position, ControlPointType.Primary);
-            var afterControlPoint = new ControlPoint(Point.Add(position, new Vector(0.3, 0.3)), ControlPointType.Secondary);
+            var beforeControlPoint = new ControlPoint(Point.Add(position, new Vector(-0.3, -0.3)), this, type: ControlPointType.Secondary);
+            var primaryControlPoint = new ControlPoint(position, this, type: ControlPointType.Primary);
+            var afterControlPoint = new ControlPoint(Point.Add(position, new Vector(0.3, 0.3)), this, type: ControlPointType.Secondary);
             ControlPoints.Add(beforeControlPoint);
             ControlPoints.Add(primaryControlPoint);
             ControlPoints.Add(afterControlPoint);
@@ -50,7 +50,7 @@ namespace Letterbox
 
         public void AddControlPoint(Point position, ControlPointType type)
         {
-            var newControlPoint = new ControlPoint(position, type);
+            var newControlPoint = new ControlPoint(position, this, type: type);
             ControlPoints.Add(newControlPoint);
             ControlPointInserted(this, new PartEventArgs(this, new List<ControlPoint> { newControlPoint }, ControlPoints.Count));
         }

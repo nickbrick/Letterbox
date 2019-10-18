@@ -28,16 +28,13 @@ namespace Letterbox
         {
             InitializeComponent();
             Loaded += GlyphEditor_Loaded;
-            //Render();
         }
 
         private void GlyphEditor_Loaded(object sender, RoutedEventArgs e)
         {
             Workpiece = ((MainWindow)System.Windows.Application.Current.MainWindow).ExampleTypeface.Glyphs.Where(glyph => glyph.Character == "a").FirstOrDefault();
-            curveEditor.Shape = Workpiece.Shape;
-            curveEditor.Navigation.Origin = new Point(curveEditor.ActualWidth / 2, curveEditor.ActualHeight / 2);
-            curveEditor.Init();
-            curveEditor.DrawShape();
+            curveEditor.LoadShape(Workpiece.Shape);
+            
 
         }
 
@@ -47,13 +44,6 @@ namespace Letterbox
             Workpiece = glyph;
             //Guidelines = glyph.GetParameters().Select(param => new Guideline(param)).ToHashSet();
         }
-        public void Render()
-        {
-            var lbl = new Label();
-            lbl.Content = Workpiece.Character;
-            
-        }
-
         private void Button_Click(object sender, RoutedEventArgs e)
         {
             curveEditor.Shape.Parts.ForEach(part => part.ControlPoints.ForEach(point => Console.WriteLine(point.Position)));

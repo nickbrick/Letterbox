@@ -47,12 +47,18 @@ namespace Letterbox
             RegisterEvents();
             InitContent();
         }
-
-        public void Init()
+        public void LoadShape(Shape shape)
         {
+            Shape = shape;
+            Navigation.Origin = new Point(ActualWidth / 2, ActualHeight / 2);
             ActivePart = Shape.Parts.FirstOrDefault();
             RegisterEvents();
             InitContent();
+            DrawShape();
+        }
+        public void Init()
+        {
+
         }
 
         private void InitContent()
@@ -89,7 +95,7 @@ namespace Letterbox
         }
         private void CurveEditor_MouseDown(object sender, MouseButtonEventArgs e)
         {
-            //CaptureMouse();
+            CaptureMouse();
             if (e.MiddleButton == MouseButtonState.Pressed)
             {
                 Navigation.PanStart = e.GetPosition(this);
@@ -173,6 +179,7 @@ namespace Letterbox
         private void Handle_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
         {
             Handle handle = (Handle)sender;
+            ActivePart = handle.ControlPoint.Part;
             SelectedHandles.Add(handle);
             handle.GetDifference(e.GetPosition(this));
             if (!(handle is SecondaryHandle))
@@ -260,8 +267,6 @@ namespace Letterbox
         public void DrawPart(Part part)
         {
             var controlPoints = part.ControlPoints;
-            //for (int i = 0; i < controlPoints.Count - 1; i += 4)
-            //{
             part.Path.Data = new PathGeometry(
                 new PathFigureCollection(
                     new List<PathFigure> {
@@ -274,7 +279,6 @@ namespace Letterbox
                     }
                 )
             );
-            //}
         }
         private Matrix GetTransformationToPixelMatrix(bool inverse = false)
         {
