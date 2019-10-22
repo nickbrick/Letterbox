@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Letterbox
 {
-    public class Glyph
+    public class Glyph : IComparable
     {
         public string Character { get; set; }
         public Shape Shape { get; set; }
@@ -28,6 +28,11 @@ namespace Letterbox
                 }
             }
             return parameters;
+        }
+
+        public int CompareTo(object obj)
+        {
+            return Character.CompareTo(((Glyph)obj).Character);
         }
     }
 }

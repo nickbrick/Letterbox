@@ -32,7 +32,7 @@ namespace Letterbox
 
         private void GlyphEditor_Loaded(object sender, RoutedEventArgs e)
         {
-            Workpiece = ((MainWindow)System.Windows.Application.Current.MainWindow).ExampleTypeface.Glyphs.Where(glyph => glyph.Character == "a").FirstOrDefault();
+            Workpiece = ((MainWindow)System.Windows.Application.Current.MainWindow).ExampleTypeface.Glyphs.Where(glyph => glyph.Character == "b").FirstOrDefault();
             curveEditor.LoadShape(Workpiece.Shape);
             
 
