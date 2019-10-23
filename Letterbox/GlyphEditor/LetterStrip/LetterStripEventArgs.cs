@@ -9,5 +9,9 @@ namespace Letterbox
     public class LetterStripEventArgs : EventArgs
     {
         public string Character { get; private set; }
+        public LetterStripEventArgs(string character)
+        {
+            Character = character;
+        }
     }
 }

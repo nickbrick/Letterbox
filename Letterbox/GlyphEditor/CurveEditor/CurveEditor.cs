@@ -35,30 +35,26 @@ namespace Letterbox
         {
             //Shape = new Shape() { Parts = new List<Part> { new Part() } };
             //ActivePart = Shape.Parts.FirstOrDefault();
-            Navigation = new Navigation();
             //RegisterEvents();
             //InitContent();
-        }
-        public CurveEditor(Glyph glyph)
-        {
-            Shape = glyph.Shape;
-            //Shape = new Shape() { Parts = new List<Part> { new Part() { ClassName = "test", Path = new Path() } } };
-            ActivePart = Shape.Parts.FirstOrDefault();
-            RegisterEvents();
-            InitContent();
+            Navigation = new Navigation();
+            
+            
         }
         public void LoadShape(Shape shape)
         {
+            Children.RemoveRange(1, Children.Count - 1);
             Shape = shape;
-            Navigation.Origin = new Point(ActualWidth / 2, ActualHeight / 2);
+            //Navigation.Origin = new Point(ActualWidth / 2, ActualHeight / 2);
             ActivePart = Shape.Parts.FirstOrDefault();
             RegisterEvents();
             InitContent();
             DrawShape();
         }
-        public void Init()
+        public void Initialize()
         {
-
+            //Navigation = new Navigation() { Origin = new Point(ActualWidth / 2, ActualHeight / 2) };
+            Navigation.Origin = new Point(ActualWidth / 2, ActualHeight / 2);
         }
 
         private void InitContent()
@@ -115,7 +111,7 @@ namespace Letterbox
         {
             Navigation.CurrentMouseModel = ToModel(e.GetPosition(this));
             Navigation.CurrentMousePixel = e.GetPosition(this);
-            
+
             if (e.LeftButton == MouseButtonState.Pressed)
             {
                 DragHandles(e);

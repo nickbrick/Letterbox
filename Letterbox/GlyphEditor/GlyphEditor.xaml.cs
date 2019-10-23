@@ -23,30 +23,38 @@ namespace Letterbox
         public Glyph Workpiece { get; set; }
         public Glyph Left;
         public Glyph Right;
+        public Typeface Typeface { get; set; }
         public HashSet<Guideline> Guidelines;
         public GlyphEditor()
         {
             InitializeComponent();
             Loaded += GlyphEditor_Loaded;
+            letterStrip_Main.SelectionChanged += LetterStrip_Main_SelectionChanged;
+            Typeface = ((MainWindow)System.Windows.Application.Current.MainWindow).Typeface;
         }
 
+        private void LetterStrip_Main_SelectionChanged(object sender, LetterStripEventArgs e)
+        {
+            Open(Typeface.FindGlyph(e.Character));
+        }
         private void GlyphEditor_Loaded(object sender, RoutedEventArgs e)
         {
-            Workpiece = ((MainWindow)System.Windows.Application.Current.MainWindow).ExampleTypeface.Glyphs.Where(glyph => glyph.Character == "b").FirstOrDefault();
-            curveEditor.LoadShape(Workpiece.Shape);
-            
-
+            curveEditor.Initialize();
+            Open(Typeface.FindGlyph("b"));
         }
 
         public void Open(Glyph glyph)
         {
-            //Workpiece = glyph;
             Workpiece = glyph;
+            curveEditor.LoadShape(Workpiece.Shape);
             //Guidelines = glyph.GetParameters().Select(param => new Guideline(param)).ToHashSet();
         }
         private void Button_Click(object sender, RoutedEventArgs e)
         {
-            curveEditor.Shape.Parts.ForEach(part => part.ControlPoints.ForEach(point => Console.WriteLine(point.Position)));
+            //curveEditor.Shape.Parts.ForEach(part => part.ControlPoints.ForEach(point => Console.WriteLine(point.Position)));
+            Console.WriteLine(curveEditor.ActivePart.ClassName);
+            curveEditor.ActivePart.ControlPoints.ForEach(point => Console.WriteLine(point.Position));
+
         }
     }
 }

@@ -23,14 +23,15 @@
         <!--<Label Content="{Binding Workpiece.Character, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type local:GlyphEditor}}}" Margin="0" FontSize="120" FontStyle="Italic" Grid.Column="2" MinWidth="50" MinHeight="100" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" Foreground="White"/>-->
         <local:CurveEditor x:Name="curveEditor" Grid.Column="1" Background="#00000000" Grid.ColumnSpan="3" >
             <StackPanel Canvas.Left="10" Canvas.Top="10" HorizontalAlignment="Left" VerticalAlignment="Top">
-                <Label Content="{Binding Navigation.CurrentMousePixel, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type local:CurveEditor}}}" Canvas.Left="10" Canvas.Top="10" Grid.Column="1" Grid.ColumnSpan="3" Foreground="White" FontSize="18" Background="{x:Null}" HorizontalAlignment="Left" VerticalAlignment="Top"/>
+                <Label Content="{Binding Navigation.CurrentMousePixel, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type local:CurveEditor}}}" Canvas.Left="10" Canvas.Top="10" Grid.Column="1" Grid.ColumnSpan="3" Foreground="White" FontSize="18" Background="{x:Null}" HorizontalAlignment="Left" VerticalAlignment="Top" Panel.ZIndex="99999"/>
                 <Label Content="{Binding Navigation.CurrentMouseModel, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type local:CurveEditor}}}" Canvas.Left="10" Canvas.Top="10" Grid.Column="1" Grid.ColumnSpan="3" Foreground="White" FontSize="18" Background="{x:Null}" HorizontalAlignment="Left" VerticalAlignment="Top"/>
+                <Label Content="ASD" Canvas.Left="10" Canvas.Top="10" Grid.Column="1" Grid.ColumnSpan="3" Foreground="White" FontSize="18" Background="{x:Null}" HorizontalAlignment="Left" VerticalAlignment="Top"/>
                 <Button Content="Print" Width="75" Click="Button_Click" HorizontalAlignment="Left"/>
             </StackPanel>
         </local:CurveEditor>
-        <local:LetterStrip FlowDirection="RightToLeft" Grid.RowSpan="3" VerticalAlignment="Center" Height="464"></local:LetterStrip>
-        <local:LetterStrip FlowDirection="LeftToRight" Grid.RowSpan="3" Grid.Column="4" VerticalAlignment="Center" Height="464"></local:LetterStrip>
-        <local:LetterStrip FlowDirection="LeftToRight" Grid.Column="1" Orientation="Horizontal" Grid.Row="2" Grid.ColumnSpan="3" HorizontalAlignment="Center" Width="693"/>
+        <local:LetterStrip x:Name="letterStrip_Left" FlowDirection="RightToLeft" Grid.RowSpan="3" VerticalAlignment="Center" Height="464"></local:LetterStrip>
+        <local:LetterStrip x:Name="letterStrip_Right" FlowDirection="LeftToRight" Grid.RowSpan="3" Grid.Column="4" VerticalAlignment="Center" Height="464"></local:LetterStrip>
+        <local:LetterStrip x:Name="letterStrip_Main" FlowDirection="LeftToRight" Grid.Column="1" Orientation="Horizontal" Grid.Row="2" Grid.ColumnSpan="3" HorizontalAlignment="Center"/>
 
     </Grid>
 </Page>

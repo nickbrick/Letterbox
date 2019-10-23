@@ -17,6 +17,11 @@ namespace Letterbox
             Glyphs = new SortedSet<Glyph> { new Glyph("a") };
             Parameters = new HashSet<Parameter> { new Parameter() };
         }
+
+        public Glyph FindGlyph(string character)
+        {
+            return Glyphs.Where(glyph => glyph.Character == character).FirstOrDefault();
+        }
     }
 
 }

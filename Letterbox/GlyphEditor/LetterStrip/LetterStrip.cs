@@ -41,7 +41,8 @@ namespace Letterbox
         private StackPanel stackPanel;
         
 
-        //public event EventHandler<LetterStripEventArgs> SelectionChanged;
+        public event EventHandler<LetterStripEventArgs> SelectionChanged;
+
         public LetterStrip()
         {
             stackPanel = new StackPanel();
@@ -64,7 +65,8 @@ namespace Letterbox
             if (fireButtonClickedEvent)
             {
                 Console.WriteLine(((LetterButton)sender).Content);
-                MessageBox.Show(((LetterButton)sender).Content.ToString());
+                //MessageBox.Show(((LetterButton)sender).Content.ToString());
+                SelectionChanged(this, new LetterStripEventArgs(((LetterButton)sender).Content.ToString()));
             }
         }
 
