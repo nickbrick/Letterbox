@@ -11,7 +11,7 @@ namespace Letterbox
 {
     public class Part
     {
-        public string ClassName;
+        public string ClassName { get; set; }
         public Path Path;
         public List<ControlPoint> ControlPoints;
         public GeometryCollection geometries = new GeometryCollection();

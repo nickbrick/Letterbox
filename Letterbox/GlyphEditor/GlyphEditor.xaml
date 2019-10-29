@@ -25,7 +25,7 @@
             <StackPanel Canvas.Left="10" Canvas.Top="10" HorizontalAlignment="Left" VerticalAlignment="Top">
                 <Label Content="{Binding Navigation.CurrentMousePixel, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type local:CurveEditor}}}" Canvas.Left="10" Canvas.Top="10" Grid.Column="1" Grid.ColumnSpan="3" Foreground="White" FontSize="18" Background="{x:Null}" HorizontalAlignment="Left" VerticalAlignment="Top" Panel.ZIndex="99999"/>
                 <Label Content="{Binding Navigation.CurrentMouseModel, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type local:CurveEditor}}}" Canvas.Left="10" Canvas.Top="10" Grid.Column="1" Grid.ColumnSpan="3" Foreground="White" FontSize="18" Background="{x:Null}" HorizontalAlignment="Left" VerticalAlignment="Top"/>
-                <Label Content="ASD" Canvas.Left="10" Canvas.Top="10" Grid.Column="1" Grid.ColumnSpan="3" Foreground="White" FontSize="18" Background="{x:Null}" HorizontalAlignment="Left" VerticalAlignment="Top"/>
+                <Label Content="{Binding ActivePart.ClassName, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type local:CurveEditor}}}" Canvas.Left="10" Canvas.Top="10" Grid.Column="1" Grid.ColumnSpan="3" Foreground="White" FontSize="18" Background="{x:Null}" HorizontalAlignment="Left" VerticalAlignment="Top"/>
                 <Button Content="Print" Width="75" Click="Button_Click" HorizontalAlignment="Left"/>
             </StackPanel>
         </local:CurveEditor>

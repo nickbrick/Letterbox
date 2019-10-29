@@ -14,20 +14,23 @@ namespace Letterbox
     public class CurveEditor : Canvas
     {
         public Shape Shape { get; set; }
-        public Part ActivePart { get; set; }
+        public Part ActivePart1 { get; set; }
         public double Scale = 50;
         private List<Handle> SelectedHandles = new List<Handle>();
-        //public Navigation Navigation { get; set; }// = new Navigation();
-
 
         public Navigation Navigation {
             get { return (Navigation)GetValue(NavigationProperty); }
             set { SetValue(NavigationProperty, value); }
         }
-
-        // Using a DependencyProperty as the backing store for Navigation.  This enables animation, styling, binding, etc...
         public static readonly DependencyProperty NavigationProperty =
             DependencyProperty.Register("Navigation", typeof(Navigation), typeof(CurveEditor), new PropertyMetadata());
+        public Part ActivePart {
+            get { return (Part)GetValue(ActivePartProperty); }
+            set { SetValue(ActivePartProperty, value); }
+        }
+        public static readonly DependencyProperty ActivePartProperty =
+            DependencyProperty.Register("ActivePart", typeof(Part), typeof(CurveEditor), new PropertyMetadata());
+
 
 
 
@@ -97,15 +100,21 @@ namespace Letterbox
                 Navigation.PanStart = e.GetPosition(this);
                 Navigation.InitialOrigin = Navigation.Origin;
             }
+            if (e.LeftButton == MouseButtonState.Pressed)
+            {
+                ActivePart = null;
+                SetSecondaryHandlesVisibility(false);
+            }
         }
         private void CurveEditor_MouseRightButtonDown(object sender, MouseButtonEventArgs e)
         {
             var mousePixel = e.GetPosition(this);
             var mouseModel = ToModel(mousePixel);
-
-            ActivePart.AddBezierControlPoint(mouseModel);
-
-            DrawPart(ActivePart);
+            if (ActivePart != null)
+            {
+                ActivePart.AddBezierControlPoint(mouseModel);
+                DrawPart(ActivePart);
+            }
         }
         public void CurveEditor_MouseMove(object sender, MouseEventArgs e)
         {
@@ -176,14 +185,29 @@ namespace Letterbox
         {
             Handle handle = (Handle)sender;
             ActivePart = handle.ControlPoint.Part;
+            Console.WriteLine(ActivePart.ClassName);
             SelectedHandles.Add(handle);
             handle.GetDifference(e.GetPosition(this));
             if (!(handle is SecondaryHandle))
             {
                 handle.ChildBefore.GetDifference();
                 handle.ChildAfter.GetDifference();
+                SetSecondaryHandlesVisibility(true, ActivePart);
+
             }
             e.Handled = true;
+        }
+
+        private void SetSecondaryHandlesVisibility(bool visible, Part part = null)
+        {
+            var visibility = visible ? Visibility.Visible : Visibility.Hidden;
+            var handles = Children.OfType<SecondaryHandle>().ToList();
+            if (part != null)
+            {
+                handles = handles.Where(handle => handle.ControlPoint.Part == part).ToList();
+            }
+
+            handles.ForEach(handle => { handle.Visibility = visibility; handle.Arm.Visibility = visibility; });
         }
 
         private void ActivePart_ControlPointInserted(object part, PartEventArgs e)
