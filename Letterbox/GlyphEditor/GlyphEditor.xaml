@@ -6,7 +6,7 @@
       xmlns:local="clr-namespace:Letterbox"
       mc:Ignorable="d" 
       d:DesignHeight="464.019" d:DesignWidth="792.991"
-      Title="GlyphEditor">
+      Title="GlyphEditor" Width="Auto" Height="Auto">
 
     <Grid Background="#FF212020">
         <Grid.RowDefinitions>

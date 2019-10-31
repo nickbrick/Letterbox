@@ -17,7 +17,9 @@ namespace Letterbox
         public Part ActivePart1 { get; set; }
         public double Scale = 50;
         private List<Handle> SelectedHandles = new List<Handle>();
+        public Guideline Baseline = new Guideline(null) { Line = new Line() };
 
+        #region Dependency properties
         public Navigation Navigation {
             get { return (Navigation)GetValue(NavigationProperty); }
             set { SetValue(NavigationProperty, value); }
@@ -29,38 +31,52 @@ namespace Letterbox
             set { SetValue(ActivePartProperty, value); }
         }
         public static readonly DependencyProperty ActivePartProperty =
-            DependencyProperty.Register("ActivePart", typeof(Part), typeof(CurveEditor), new PropertyMetadata());
-
-
-
+            DependencyProperty.Register("ActivePart", typeof(Part), typeof(CurveEditor), new PropertyMetadata()); 
+        #endregion
 
         public CurveEditor() : base()
         {
-            //Shape = new Shape() { Parts = new List<Part> { new Part() } };
-            //ActivePart = Shape.Parts.FirstOrDefault();
-            //RegisterEvents();
-            //InitContent();
             Navigation = new Navigation();
-            
-            
-        }
-        public void LoadShape(Shape shape)
-        {
-            Children.RemoveRange(1, Children.Count - 1);
-            Shape = shape;
-            //Navigation.Origin = new Point(ActualWidth / 2, ActualHeight / 2);
-            ActivePart = Shape.Parts.FirstOrDefault();
-            RegisterEvents();
-            InitContent();
-            DrawShape();
-        }
-        public void Initialize()
-        {
-            //Navigation = new Navigation() { Origin = new Point(ActualWidth / 2, ActualHeight / 2) };
-            Navigation.Origin = new Point(ActualWidth / 2, ActualHeight / 2);
         }
 
-        private void InitContent()
+        public void LoadShape(Shape shape)
+        {
+            ClearContent();
+            Shape = shape;
+            ActivePart = Shape.Parts.FirstOrDefault();
+            RegisterEvents();
+            InitializeContent();
+            DrawShape();
+        }
+
+        private void ClearContent()
+        {
+            Children.OfType<Path>().ToList().ForEach(path => Children.Remove(path));
+            Children.OfType<Handle>().ToList().ForEach(handle =>
+            {
+                Children.Remove(handle);
+                if (handle is SecondaryHandle)
+                {
+                    Children.Remove(((SecondaryHandle)handle).Arm);
+                }
+            });
+        }
+
+        public void Initialize()
+        {
+            Navigation.Origin = new Point(ActualWidth / 2, ActualHeight * 2 / 3);
+            InitializeBaseline();
+        }
+        private void InitializeBaseline()
+        {
+            Baseline.Line.X1 = 0;
+            Baseline.Line.Y1 = Navigation.Origin.Y;
+            Baseline.Line.X2 = ActualWidth;
+            Baseline.Line.Y2 = Navigation.Origin.Y;
+            Baseline.Line.Stroke = System.Windows.Media.Brushes.Gray;
+            Children.Add(Baseline.Line);
+        }
+        private void InitializeContent()
         {
             foreach (Part part in Shape.Parts)
             {
@@ -84,10 +100,18 @@ namespace Letterbox
             base.MouseDown += CurveEditor_MouseDown;
             base.MouseUp += CurveEditor_MouseUp;
             base.PreviewMouseMove += CurveEditor_MouseMove;
+            base.SizeChanged += CurveEditor_SizeChanged;
             ActivePart.ControlPointInserted += ActivePart_ControlPointInserted;
             ActivePart.BezierControlPointInserted += ActivePart_BezierControlPointInserted;
         }
 
+        #region CurveEditor events
+        private void CurveEditor_SizeChanged(object sender, SizeChangedEventArgs e)
+        {
+            Navigation.Origin = new Point(ActualWidth / 2, ActualHeight * 2 / 3);
+            DrawGuidelines();
+            DrawShape();
+        }
         private void CurveEditor_MouseUp(object sender, MouseButtonEventArgs e)
         {
             ReleaseMouseCapture();
@@ -116,7 +140,7 @@ namespace Letterbox
                 DrawPart(ActivePart);
             }
         }
-        public void CurveEditor_MouseMove(object sender, MouseEventArgs e)
+        private void CurveEditor_MouseMove(object sender, MouseEventArgs e)
         {
             Navigation.CurrentMouseModel = ToModel(e.GetPosition(this));
             Navigation.CurrentMousePixel = e.GetPosition(this);
@@ -129,13 +153,16 @@ namespace Letterbox
             {
                 Pan(e);
             }
-        }
+        } 
+        #endregion
 
         private void Pan(MouseEventArgs e)
         {
             Navigation.Origin = Point.Add(Navigation.InitialOrigin, (Vector)(Point.Subtract(e.GetPosition(this), (Vector)Navigation.PanStart)));
+            DrawGuidelines();
             DrawShape();
         }
+
 
         private void DragHandles(MouseEventArgs e)
         {
@@ -174,7 +201,7 @@ namespace Letterbox
                 secondaryHandle.Arm.X2 = parent.GetPosition().X;
                 secondaryHandle.Arm.Y2 = parent.GetPosition().Y;
             }
-            DrawPart(ActivePart);
+            DrawPart(handle.ControlPoint.Part);
         }
         private void Handle_MouseLeftButtonUp(object sender, MouseButtonEventArgs e)
         {
@@ -273,7 +300,9 @@ namespace Letterbox
             RegisterHandleEvents(afterHandle);
 
         }
-        public void DrawShape()
+
+        #region Draws
+        private void DrawShape()
         {
             foreach (var handle in Children.OfType<Handle>())
             {
@@ -284,7 +313,7 @@ namespace Letterbox
                 DrawPart(part);
             }
         }
-        public void DrawPart(Part part)
+        private void DrawPart(Part part)
         {
             var controlPoints = part.ControlPoints;
             part.Path.Data = new PathGeometry(
@@ -300,6 +329,15 @@ namespace Letterbox
                 )
             );
         }
+        private void DrawGuidelines()
+        {
+            Baseline.Line.X2 = ActualWidth;
+            Baseline.Line.Y1 = Navigation.Origin.Y;
+            Baseline.Line.Y2 = Navigation.Origin.Y;
+        } 
+        #endregion
+
+        #region Transformations
         private Matrix GetTransformationToPixelMatrix(bool inverse = false)
         {
             var matrix = new Matrix(Scale, 0, 0, -Scale, Navigation.Origin.X, Navigation.Origin.Y);
@@ -314,10 +352,23 @@ namespace Letterbox
             var pixel = Point.Multiply(model, GetTransformationToPixelMatrix());
             return pixel;
         }
+        private Point ToPixel(double model_)
+        {
+            var model = new Point(model_, model_);
+            var pixel = Point.Multiply(model, GetTransformationToPixelMatrix());
+            return pixel;
+        }
         private Point ToModel(Point pixel)
         {
             var model = Point.Multiply(pixel, GetTransformationToPixelMatrix(inverse: true));
             return model;
         }
+        private Point ToModel(double pixel_)
+        {
+            var pixel = new Point(pixel_, pixel_);
+            var model = Point.Multiply(pixel, GetTransformationToPixelMatrix(inverse: true));
+            return model;
+        }
+        #endregion
     }
 }

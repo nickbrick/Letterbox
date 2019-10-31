@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Letterbox"
         mc:Ignorable="d"
-        Title="MainWindow" Height="419.159" Width="635.981">
+        Title="MainWindow" Height="800" Width="1000">
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="2*"/>

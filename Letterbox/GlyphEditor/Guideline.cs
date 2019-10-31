@@ -16,18 +16,21 @@ namespace Letterbox
 
         public Guideline(Parameter parameter)
         {
-            Parameter = parameter;
-            if (Parameter.Orientation == Orientation.Horizontal)
+            if (parameter != null)
             {
+                Parameter = parameter;
+                if (Parameter.Orientation == Orientation.Horizontal)
+                {
 
-            }
-            else if (Parameter.Orientation == Orientation.Vertical)
-            {
+                }
+                else if (Parameter.Orientation == Orientation.Vertical)
+                {
 
-            }
-            else
-            {
+                }
+                else
+                {
 
+                }
             }
         }
     }
